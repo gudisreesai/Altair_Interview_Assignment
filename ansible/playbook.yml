@@ -1,0 +1,9 @@
+- hosts: sentry_server
+  become: yes
+  vars:
+    sentry_version: '24.5.0'  # Specify the Sentry version you want to install
+    sentry_db_password: 'your_secure_db_password'
+    sentry_secret_key: 'your_secure_secret_key'
+  roles:
+    - docker
+    - sentry

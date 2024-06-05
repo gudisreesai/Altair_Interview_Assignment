@@ -1,0 +1,24 @@
+- name: Install Git
+  apt:
+    name: git
+    state: present
+
+- name: Clone Sentry repository
+  git:
+    repo: 'https://github.com/getsentry/onpremise.git'
+    dest: /opt/sentry
+    version: '{{ sentry_version }}'
+
+- name: Change to Sentry directory
+  command: chdir=/opt/sentry /bin/true
+
+- name: Create .env file from template
+  template:
+    src: .env.j2
+    dest: /opt/sentry/.env
+
+- name: Run Sentry install script
+  command: chdir=/opt/sentry ./install.sh
+  environment:
+    SENTRY_SECRET_KEY: '{{ sentry_secret_key }}'
+    SENTRY_DB_PASSWORD: '{{ sentry_db_password }}'
